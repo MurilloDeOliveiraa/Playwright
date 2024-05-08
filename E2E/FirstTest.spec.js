@@ -3,11 +3,9 @@ import { test, expect } from '@playwright/test'
 
 // o page é para poder usar os métodos, como se eu estivesse inicializando um objeto
 test('My first Test', async ({ page }) => {
-    await page.goto('https://google.com')
-    await expect(page).toHaveTitle("Google")
-});
-
-test('Second Test', async ({ page }) => {
-    await page.goto('https://globoesporte.globo.com/')
-    await expect(page).toHaveTitle("ge.globo - É esporte sempre")
+    await page.goto('https://google.com');
+    await page.locator('#APjFqb').click();
+    await page.locator('#APjFqb').fill('Globo');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveTitle("Globo - Pesquisa Google");
 });
