@@ -12,12 +12,15 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+    versionSource: 'spec'
+    versionSpec: '16.x'
+    checkLatest: true
+    retryCountOnDownloadFails: '3'
 
 - script: |
     npm install
     npm run build
   displayName: 'npm install and build'
+
 
   
