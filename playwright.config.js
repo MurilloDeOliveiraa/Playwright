@@ -10,6 +10,10 @@ if (env !== '') {
   dotenv.config({
     path: `./Envs/${env}.env`  //here it'll read a specific env file for a specific environment
   });
+} else {
+  dotenv.config({
+    path: `./Envs/prod.env`  //here it'll read a specific env file for a specific environment
+  });
 }
 
 module.exports = defineConfig({
