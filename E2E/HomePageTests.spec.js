@@ -1,18 +1,38 @@
-import { test, expect } from '@playwright/test'
+//@ts-check
+'use strict';
 
-test('Google Test', async ({ page }) => {
-    let googleSearchBar = '#APjFqb';
-    let localRun = false;
+import { test, chromium } from '@playwright/test'
+import { LoginPage } from "../Pages/LoginPage";
+import { HomePage } from "../Pages/HomePage";
+import { CartPage } from "../Pages/CartPage";
 
-    await page.goto('https://google.com');
-    await page.locator(googleSearchBar).click();
-    await page.locator(googleSearchBar).fill('Globo');
-    await page.keyboard.press('Enter');
-    await page.pause();
+test.describe('@Smoke - Smoke Tests', () => {
+    let browser;
+    let context;
+    let page;
+    let loginPage, homePage, cartPage;
+    const url = process.env.URL;
 
-    if (localRun) {
-        await expect(page).toHaveTitle('Globo - Pesquisa Google');
-    } else {
-        await expect(page).toHaveTitle('Globo - Google Search');
-    }
+    test.beforeEach(async () => {
+        browser = await chromium.launch();
+        context = await browser.newContext();
+        page = await context.newPage();
+        loginPage = new LoginPage(page);
+        homePage = new HomePage(page);
+        cartPage = new CartPage(page);
+    });
+
+    test.afterAll(async () => {
+        await browser.close();
+    });
+
+    test('Add one prodcut to cart', async () => {
+        await loginPage.goToLoginPage(url);
+        await loginPage.fillLoginFields(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
+        await homePage.verifyIsOnHomePage();
+        await homePage.addOneBackpackToCart();
+        await homePage.clickToViewCart();
+        await cartPage.verifyCorrectItemQuantity(1);
+        await cartPage.verifyCorrectItemName();
+    });
 });
