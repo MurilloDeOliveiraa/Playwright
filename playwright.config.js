@@ -1,20 +1,22 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
+import dotenv from 'dotenv';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
+//POSSIBLE VALUES: local, prod
+let env = '';
 
-/**
- * @see https://playwright.dev/docs/test-configuration
- */
+dotenv.config();  // It'll read the .env file, which is has common variables for each environment
+if (env !== '') {
+  dotenv.config({
+    path: `./Envs/${env}.env`  //here it'll read a specific env file for a specific environment
+  });
+}
+
 module.exports = defineConfig({
   testDir: './E2E',
-  timeout: 10 * 1000,
+  timeout: 15000,
   expect: {
-    timeout: 3000
+    timeout: 5000
   },
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -42,36 +44,34 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    },
     // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
+    //   name: 'Local',
+    //   use: {
+    //     dotenv: `./Envs/local.env`
+    //   }
     // },
     // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+    //   name: 'Prod',
+    //   use: {
 
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    //   }
+    // }
+
   ],
 
   /* Run your local dev server before starting the tests */
@@ -81,4 +81,3 @@ module.exports = defineConfig({
   //   reuseExistingServer: !process.env.CI,
   // },
 });
-

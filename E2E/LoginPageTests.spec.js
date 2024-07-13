@@ -5,33 +5,42 @@ import { test, chromium } from '@playwright/test';
 import { LoginPage } from "../Pages/LoginPage";
 import { HomePage } from "../Pages/HomePage";
 
-test.describe('Login Tests', () => {
+test.describe('@Smoke - Smoke Tests', () => {
     let browser;
     let context;
     let page;
     let loginPage;
     let homePage;
-    const url = 'https://www.saucedemo.com/';
+    const url = process.env.URL;
 
     test.beforeEach(async () => {
         browser = await chromium.launch();
         context = await browser.newContext();
         page = await context.newPage();
-        await page.goto(url);
-        await page.pause();
         loginPage = new LoginPage(page);
         homePage = new HomePage(page);
     });
 
-    test.afterAll(async () => {
-        await page.close();
-        await context.close();
+    test.afterEach(async () => {
         await browser.close();
     });
 
-    test('@Smoke - Should successfully Login', async () => {
-        await loginPage.fillLoginFields('standard_user', 'secret_sauce');
+    test('Successfully Login', async () => {
+        await loginPage.goToLoginPage(url);
+        await loginPage.fillLoginFields(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
         await homePage.verifyIsOnHomePage();
     });
+
+    test('Login with invalid credentials', async () => {
+        await loginPage.goToLoginPage(url);
+        await loginPage.fillLoginFields(process.env.INVALID_USERNAME, process.env.INVALID_PASSWORD);
+        await loginPage.verifyErrorMessageIsVisible();
+    })
+
+    test('Login with blank fields', async () => {
+        await loginPage.goToLoginPage(url);
+        await loginPage.fillLoginFields('', '');
+        await loginPage.verifyErrorMessageIsVisible();
+    })
 });
 
