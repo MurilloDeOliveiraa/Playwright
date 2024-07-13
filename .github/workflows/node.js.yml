@@ -11,18 +11,11 @@ on:
 
 jobs:
   run-Playwright-Tests:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      issues: write
-      steps:
-      - run: |
-          gh issue --repo ${{ github.repository }} \
-            create --title "Issue title" --body "Issue body"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALID_USERNAME: ${{ secrets.VALID_USERNAME }}
-          VALID_PASSWORD: ${{ secrets.VALID_PASSWORD }}
+    runs-on: ubuntu-latest    
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VALID_USERNAME: ${{ secrets.VALID_USERNAME }}
+      VALID_PASSWORD: ${{ secrets.VALID_PASSWORD }}
 
     steps:
     - uses: actions/checkout@v4
