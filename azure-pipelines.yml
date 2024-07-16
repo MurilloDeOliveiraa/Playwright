@@ -21,7 +21,7 @@ steps:
     npm ci    
   displayName: 'npm install'
 - script: |
-    npx playwright test --project= chromium    
+    npx playwright test --project=chromium    
   displayName: 'Run Tests'  
 
 
