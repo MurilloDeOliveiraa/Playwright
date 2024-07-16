@@ -19,7 +19,7 @@ steps:
 - script: |
     npm ci    
   displayName: 'npm install'
-- script: npx playwright install --with-deps
+- script: npx playwright install --with-deps chromium
   displayName: 'Install Playwright browsers'
 - script: |
     npx playwright test --project=chromium    
@@ -38,7 +38,7 @@ steps:
   condition: succeededOrFailed()
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: playwright-report
+    targetPath: '$(Pipeline.Workspace)'
     artifact: playwright-report
     publishLocation: 'pipeline'
   condition: succeededOrFailed()
