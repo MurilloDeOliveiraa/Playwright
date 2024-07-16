@@ -26,13 +26,20 @@ steps:
   displayName: 'Run Tests'
   env:
     CI: 'true'
+# - task: PublishTestResults@2
+#   displayName: 'Publish test results'
+#   inputs:
+#     searchFolder: 'test-results'
+#     testResultsFormat: 'JUnit'
+#     testResultsFiles: 'e2e-junit-results.xml'
+#     testRunTitle: 'My End-To-End Tests'
+#   condition: succeededOrFailed()
 - task: PublishTestResults@2
   displayName: 'Publish test results'
   inputs:
-    searchFolder: 'test-results'
-    testResultsFormat: 'JUnit'
-    testResultsFiles: 'e2e-junit-results.xml'
-    testRunTitle: 'My End-To-End Tests'
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/.xml'
+    testRunTitle: 'E2E Tests'
   condition: succeededOrFailed()
 - task: PublishPipelineArtifact@1
   inputs:
@@ -40,3 +47,5 @@ steps:
     artifact: playwright-report
     publishLocation: 'pipeline'
   condition: succeededOrFailed()
+
+
