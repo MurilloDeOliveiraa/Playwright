@@ -15,14 +15,15 @@ steps:
     versionSource: 'spec'
     versionSpec: '16.x'
     checkLatest: true
-    retryCountOnDownloadFails: '3'
 
 - script: |
     npm ci    
   displayName: 'npm install'
+- script: npx playwright install --with-deps
+  displayName: 'Install Playwright browsers'
 - script: |
     npx playwright test --project=chromium    
-  displayName: 'Run Tests'  
-
-
+  displayName: 'Run Tests'
+  env:
+    CI: 'true'
   
