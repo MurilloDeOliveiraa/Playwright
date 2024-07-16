@@ -31,13 +31,11 @@ steps:
   inputs:
     searchFolder: 'playwright-report'
     testResultsFiles: 'index.html'
-    mergeTestResults: true
-    failTaskOnFailedTests: true
     testRunTitle: 'My End-To-End Tests'
   condition: succeededOrFailed()
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: 'playwright-report'
+    targetPath: playwright-report
     artifact: playwright-report
     publishLocation: 'pipeline'
   condition: succeededOrFailed()
