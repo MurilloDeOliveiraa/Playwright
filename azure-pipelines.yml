@@ -29,8 +29,9 @@ steps:
 - task: PublishTestResults@2
   displayName: 'Publish test results'
   inputs:
-    searchFolder: 'playwright-report'
-    testResultsFiles: 'index.html'
+    searchFolder: 'test-results'
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'e2e-junit-results.xml'
     testRunTitle: 'My End-To-End Tests'
   condition: succeededOrFailed()
 - task: PublishPipelineArtifact@1
