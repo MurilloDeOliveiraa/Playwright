@@ -14,8 +14,11 @@ parameters:
 
   - name: AllTests
     displayName: Run All Tests?
-    type: boolean
-    default: false
+    type: string
+    default: Yes
+    values:
+      - Yes
+      - No
       
 
 trigger:
@@ -38,8 +41,10 @@ steps:
 - script: |
     npm ci    
   displayName: 'npm install'
+
 - script: npx playwright install --with-deps chromium
   displayName: 'Install Playwright browsers'
+
 - script: |
     npx playwright test --project=chromium    
   displayName: 'Run Tests'
