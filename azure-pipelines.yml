@@ -24,69 +24,80 @@ variables:
 trigger:
 - master
 
-jobs:
-- job: A
-  displayName: Build and Test
-  timeoutInMinutes: 10
-  pool:
-    vmImage: ubuntu-latest
+stages:
+  - stage: SETUP
+    jobs:
+    - job: SETUP
+      workspace:
+        clean: all
+      steps:
+      - bash: docker pull mcr.microsoft.com/playwright:v1.43.0-jammy
+      displayName: Pull Playwright Image
 
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSource: 'spec'
-      versionSpec: '16.x'
-      checkLatest: true
+  - stage: RUN_E2E_TESTS
+    jobs:
+    - job: A
+      displayName: Build and Test
+      timeoutInMinutes: 10
+      pool:
+        vmImage: ubuntu-latest
 
-  - script: echo "start" # always runs
-  - ${{ if eq(parameters.AllTests, True) }}:
-    - script: echo $(VALID_USERNAME_SAUCEDEMO) # runs when Boolean=true
-    - script: echo $(VALID_PASSWORD_SAUCEDEMO) # runs when Boolean=true
+      steps:
+      - task: NodeTool@0
+        inputs:
+          versionSource: 'spec'
+          versionSpec: '16.x'
+          checkLatest: true
 
-  - script: |
-      npm ci    
-    displayName: 'npm install'
+      - script: echo "start" # always runs
+      - ${{ if eq(parameters.AllTests, True) }}:
+        - script: echo $(VALID_USERNAME_SAUCEDEMO) # runs when Boolean=true
+        - script: echo $(VALID_PASSWORD_SAUCEDEMO) # runs when Boolean=true
 
-  - bash: |
-      echo "Using the mapped env var for this task works and is recommended: $VALID_USERNAME"
-      echo "Using the mapped env var for this task works and is recommended: $VALID_PASSWORD"
-    env:
-      VALID_USERNAME: $(VALID_USERNAME_SAUCEDEMO) # the recommended way to map to an env variable
-      VALID_PASSWORD: $(VALID_PASSWORD_SAUCEDEMO)
-    displayName: Set Environment Variables
+      - script: |
+          npm ci    
+        displayName: 'npm install'
 
-  - bash: printenv
-    displayName: Get Enviroment Variables
+      - bash: |
+          echo "Using the mapped env var for this task works and is recommended: $VALID_USERNAME"
+          echo "Using the mapped env var for this task works and is recommended: $VALID_PASSWORD"
+        env:
+          VALID_USERNAME: $(VALID_USERNAME_SAUCEDEMO) # the recommended way to map to an env variable
+          VALID_PASSWORD: $(VALID_PASSWORD_SAUCEDEMO)
+        displayName: Set Environment Variables
 
-  - script: npx playwright install --with-deps chromium
-    displayName: 'Install Playwright browsers'
+      - bash: printenv
+        displayName: Get Enviroment Variables
 
-  - script: npx playwright test --project=chromium    
-    displayName: 'Run Tests'
-    env:
-      CI: 'true'
-      VALID_USERNAME: '$(VALID_USERNAME_SAUCEDEMO)'
-      VALID_PASSWORD: '$(VALID_PASSWORD_SAUCEDEMO)'
-   
-  - task: PublishTestResults@2
-    displayName: 'Publish test results'
-    inputs:
-      searchFolder: 'test-results'
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'e2e-junit-results.xml'
-      mergeTestResults: true
-      failTaskOnFailedTests: true
-      testRunTitle: 'My End-To-End Tests'
-    condition: succeededOrFailed()
-  - task: PublishPipelineArtifact@1
-    inputs:
-      artifact: playwright-report-test
-      publishLocation: 'pipeline'
-    condition: succeededOrFailed()
+      - script: npx playwright install --with-deps chromium
+        displayName: 'Install Playwright browsers'
 
-- job: B
-  displayName: Final Job
-  timeoutInMinutes: 5  
-  dependsOn: A
-  steps:
-  - script: echo FINAL JOB IS COMPLETED
+      - script: npx playwright test --project=chromium    
+        displayName: 'Run Tests'
+        env:
+          CI: 'true'
+          VALID_USERNAME: '$(VALID_USERNAME_SAUCEDEMO)'
+          VALID_PASSWORD: '$(VALID_PASSWORD_SAUCEDEMO)'
+      
+      - task: PublishTestResults@2
+        displayName: 'Publish test results'
+        inputs:
+          searchFolder: 'test-results'
+          testResultsFormat: 'JUnit'
+          testResultsFiles: 'e2e-junit-results.xml'
+          mergeTestResults: true
+          failTaskOnFailedTests: true
+          testRunTitle: 'My End-To-End Tests'
+        condition: succeededOrFailed()
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifact: playwright-report-test
+          publishLocation: 'pipeline'
+        condition: succeededOrFailed()
+
+    - job: B
+      displayName: Final Job
+      timeoutInMinutes: 5  
+      dependsOn: A
+      steps:
+      - script: echo FINAL JOB IS COMPLETED
