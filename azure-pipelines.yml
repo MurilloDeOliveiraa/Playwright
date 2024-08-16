@@ -48,8 +48,10 @@ jobs:
     displayName: 'npm install'
 
   - bash: |
-      -e VALID_USERNAME=$(VALID_USERNAME_SAUCEDEMO)" \
-      -e PASSWORD=$(VALID_PASSWORD_SAUCEDEMO)" \
+      echo "Using the mapped env var for this task works and is recommended: $VALID_USERNAME"
+    env:
+      VALID_USERNAME: $(VALID_USERNAME_SAUCEDEMO) # the recommended way to map to an env variable
+      VALID_PASSWORD: $(VALID_PASSWORD_SAUCEDEMO)
     displayName: Set Environment Variables
 
   - script: npx playwright install --with-deps chromium
