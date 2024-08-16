@@ -48,8 +48,8 @@ jobs:
     displayName: 'npm install'
 
   - bash: |
-      echo "##vso[task.setvariable variable=VALID_USERNAME]$(VALID_USERNAME_SAUCEDEMO)" \
-      echo "##vso[task.setvariable variable=VALID_PASSWORD]$(VALID_PASSWORD_SAUCEDEMO)" \
+      -e VALID_USERNAME=$(VALID_USERNAME_SAUCEDEMO)" \
+      -e PASSWORD=$(VALID_PASSWORD_SAUCEDEMO)" \
     displayName: Set Environment Variables
 
   - script: npx playwright install --with-deps chromium
