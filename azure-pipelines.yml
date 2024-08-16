@@ -25,7 +25,8 @@ trigger:
 - master
 
 jobs:
-- job: myTestJob
+- job: A
+  displayName: Build and Test
   timeoutInMinutes: 10
   pool:
     vmImage: ubuntu-latest
@@ -69,4 +70,9 @@ jobs:
       publishLocation: 'pipeline'
     condition: succeededOrFailed()
 
-
+- job: B
+  displayName: Final Job
+  timeoutInMinutes: 5  
+  dependsOn: A
+  steps:
+  - script: echo FINAL JOB IS COMPLETED
