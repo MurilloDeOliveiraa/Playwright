@@ -14,11 +14,8 @@ parameters:
 
   - name: AllTests
     displayName: Run All Tests?
-    type: string
-    default: Yes
-    values:
-      - Yes
-      - No
+    type: boolean
+    default: True    
       
 variables:
 - group: ENV_VARIABLES
@@ -41,7 +38,7 @@ jobs:
       checkLatest: true
 
   - script: echo "start" # always runs
-  - ${{ if eq(parameters.AllTests, true) }}:
+  - ${{ if eq(parameters.AllTests, True) }}:
     - script: echo $(VALID_USERNAME_SAUCEDEMO) # runs when Boolean=true
     - script: echo $(VALID_PASSWORD_SAUCEDEMO) # runs when Boolean=true
   - script: |
