@@ -49,6 +49,7 @@ jobs:
 
   - bash: |
       echo "Using the mapped env var for this task works and is recommended: $VALID_USERNAME"
+      echo "Using the mapped env var for this task works and is recommended: $VALID_PASSWORD"
     env:
       VALID_USERNAME: $(VALID_USERNAME_SAUCEDEMO) # the recommended way to map to an env variable
       VALID_PASSWORD: $(VALID_PASSWORD_SAUCEDEMO)
@@ -62,6 +63,8 @@ jobs:
     displayName: 'Run Tests'
     env:
       CI: 'true'
+      VALID_USERNAME: $(VALID_USERNAME_SAUCEDEMO)
+      VALID_PASSWORD: $(VALID_PASSWORD_SAUCEDEMO)
   - task: PublishTestResults@2
     displayName: 'Publish test results'
     inputs:
