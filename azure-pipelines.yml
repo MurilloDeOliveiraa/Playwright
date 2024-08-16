@@ -15,50 +15,63 @@ parameters:
   - name: AllTests
     displayName: Run All Tests?
     type: boolean
-    default: false
+    default: True    
       
+variables:
+- group: ENV_VARIABLES
 
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
+jobs:
+- job: A
+  displayName: Build and Test
+  timeoutInMinutes: 10
+  pool:
+    vmImage: ubuntu-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSource: 'spec'
-    versionSpec: '16.x'
-    checkLatest: true
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSource: 'spec'
+      versionSpec: '16.x'
+      checkLatest: true
 
-- script: echo "start" # always runs
-- ${{ if eq(parameters.AllTests, true) }}:
-  - script: echo "this is a test" # runs when Boolran=true
+  - script: echo "start" # always runs
+  - ${{ if eq(parameters.AllTests, True) }}:
+    - script: echo $(VALID_USERNAME_SAUCEDEMO) # runs when Boolean=true
+    - script: echo $(VALID_PASSWORD_SAUCEDEMO) # runs when Boolean=true
+  - script: |
+      npm ci    
+    displayName: 'npm install'
 
-- script: |
-    npm ci    
-  displayName: 'npm install'
-- script: npx playwright install --with-deps chromium
-  displayName: 'Install Playwright browsers'
-- script: |
-    npx playwright test --project=chromium    
-  displayName: 'Run Tests'
-  env:
-    CI: 'true'
-- task: PublishTestResults@2
-  displayName: 'Publish test results'
-  inputs:
-    searchFolder: 'test-results'
-    testResultsFormat: 'JUnit'
-    testResultsFiles: 'e2e-junit-results.xml'
-    mergeTestResults: true
-    failTaskOnFailedTests: true
-    testRunTitle: 'My End-To-End Tests'
-  condition: succeededOrFailed()
-- task: PublishPipelineArtifact@1
-  inputs:
-    artifact: playwright-report-test
-    publishLocation: 'pipeline'
-  condition: succeededOrFailed()
+  - script: npx playwright install --with-deps chromium
+    displayName: 'Install Playwright browsers'
 
+  - script: |
+      npx playwright test --project=chromium    
+    displayName: 'Run Tests'
+    env:
+      CI: 'true'
+  - task: PublishTestResults@2
+    displayName: 'Publish test results'
+    inputs:
+      searchFolder: 'test-results'
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'e2e-junit-results.xml'
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+      testRunTitle: 'My End-To-End Tests'
+    condition: succeededOrFailed()
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifact: playwright-report-test
+      publishLocation: 'pipeline'
+    condition: succeededOrFailed()
 
+- job: B
+  displayName: Final Job
+  timeoutInMinutes: 5  
+  dependsOn: A
+  steps:
+  - script: echo FINAL JOB IS COMPLETED
