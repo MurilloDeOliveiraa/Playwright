@@ -58,13 +58,16 @@ jobs:
   - script: npx playwright install --with-deps chromium
     displayName: 'Install Playwright browsers'
 
-  - script: |
-      npx playwright test --project=chromium    
+  - bash: 'get-childItem env:'
+    displayName: Get Enviroment Variables
+
+  - script: npx playwright test --project=chromium    
     displayName: 'Run Tests'
     env:
       CI: 'true'
-      VALID_USERNAME: $(VALID_USERNAME_SAUCEDEMO)
-      VALID_PASSWORD: $(VALID_PASSWORD_SAUCEDEMO)
+      VALID_USERNAME: '$(VALID_USERNAME_SAUCEDEMO)'
+      VALID_PASSWORD: '$(VALID_PASSWORD_SAUCEDEMO)'
+   
   - task: PublishTestResults@2
     displayName: 'Publish test results'
     inputs:
