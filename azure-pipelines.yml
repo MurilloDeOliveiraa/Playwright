@@ -55,11 +55,11 @@ jobs:
       VALID_PASSWORD: $(VALID_PASSWORD_SAUCEDEMO)
     displayName: Set Environment Variables
 
+  - bash: printenv
+    displayName: Get Enviroment Variables
+
   - script: npx playwright install --with-deps chromium
     displayName: 'Install Playwright browsers'
-
-  - bash: 'get-childItem env:'
-    displayName: Get Enviroment Variables
 
   - script: npx playwright test --project=chromium    
     displayName: 'Run Tests'
