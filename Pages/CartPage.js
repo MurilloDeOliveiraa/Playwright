@@ -10,6 +10,7 @@ export class CartPage {
         this.pageUrl = 'https://www.saucedemo.com/inventory.html';
         this.addedItemName = page.locator('.inventory_item_name');
         this.addedItemQuantity = page.locator('.cart_quantity');
+        this.testLocator = page.locator('');
     }
 
     async verifyCorrectItemQuantity(quantity) {
