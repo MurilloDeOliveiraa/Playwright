@@ -1,0 +1,11 @@
+name: GitHub Actions Learning - Udemy
+on: 
+    workflow_dispatch:
+    push: 
+        branches: master 
+jobs:
+    Show-Comments:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Executing my script
+              run: echo "Hello Murillo"
