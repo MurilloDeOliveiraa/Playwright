@@ -9,3 +9,7 @@ jobs:
         steps:
             - name: Executing my script
               run: echo "Hello Murillo"
+            - name: Getting GitHub context
+              run: |
+                echo "${{github.repository_owner}}"
+                echo "${{github.repository}}"
