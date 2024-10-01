@@ -10,9 +10,8 @@ on:
     branches: [ "master" ]
 
 jobs:
-  run-Playwright-Tests:
+  Run-Tests:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Branch
       uses: actions/checkout@v4
@@ -33,3 +32,17 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+  Deploy:
+    needs: Run-Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Test Result Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report
+      - name: Show Artifact Content
+        run: ls
+      - name: Deploy Artifact
+        run: echo "Deploying..."
+
+
