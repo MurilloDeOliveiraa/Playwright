@@ -2,7 +2,7 @@ name: GitHub Actions Learning - Udemy
 on: 
     workflow_dispatch:
     push: 
-        branches: master 
+        branches: learning-GHA
 jobs:
     Show-Comments:
         runs-on: ubuntu-latest
