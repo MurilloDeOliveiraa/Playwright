@@ -16,6 +16,7 @@ jobs:
     Run-Tests:
       needs: Show-Comments
       runs-on: ubuntu-latest
+      #environment: Prod   #aqui eu posso especificar um ambiente e rodar as variaveis de acordo com cada ambiente
       env:
         VALID_USERNAME: ${{secrets.VALID_USERNAME}}
         VALID_PASSWORD: ${{secrets.VALID_PASSWORD}}
