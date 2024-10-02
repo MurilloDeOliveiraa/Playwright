@@ -14,12 +14,13 @@ jobs:
                 echo "${{github.repository_owner}}"
                 echo "${{github.repository}}"
     Run-Tests:
+      needs: Show-Comments
       runs-on: ubuntu-latest
       env:
-        VALID_USERNAME: standard_user
-        VALID_PASSWORD: secret_sauce
-        INVALID_USERNAME: wrong_username
-        INVALID_PASSWORD: ASDFGH
+        VALID_USERNAME: ${{secrets.VALID_USERNAME}}
+        VALID_PASSWORD: ${{secrets.VALID_PASSWORD}}
+        INVALID_USERNAME: ${{secrets.INVALID_USERNAME}}
+        INVALID_PASSWORD: ${{secrets.INVALID_PASSWORD}}
       steps:
       - name: Checkout Branch
         uses: actions/checkout@v4
