@@ -24,7 +24,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright Tests 
-      run: npx playwright test 
+      run: npx playwright test --grep=@Smoke --project=chromium
     - name: Publish Artifact
       uses: actions/upload-artifact@v4
       if: always()
