@@ -19,6 +19,7 @@ jobs:
       environment:
         name: Prod   #aqui eu posso especificar um ambiente e rodar as variaveis de acordo com cada ambiente. Preciso criar esse ambiente lá no GitHub, dentro do repo
       env:
+        ENV: prod
         VALID_USERNAME: ${{secrets.VALID_USERNAME}}
         VALID_PASSWORD: ${{secrets.VALID_PASSWORD}}
         INVALID_USERNAME: ${{secrets.INVALID_USERNAME}}
