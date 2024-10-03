@@ -1,45 +1,57 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
-- master
+- none
 
 pool:
   vmImage: ubuntu-latest
 
+variables:
+- group: ENV_VARIABLES
+
+parameters:
+  - name: Environments
+    type: string
+    default: prod
+    values:
+      - qa
+      - dev
+      - uat
+      - prod
+
 steps:
 - task: NodeTool@0
   inputs:
-    versionSource: 'spec'
-    versionSpec: '16.x'
-    checkLatest: true
+    versionSpec: '18.x'
+  displayName: 'Install Node.js'
+
+- script: npm ci
+  displayName: 'npm install and build'
+
+- script: npx playwright install chromium --with-deps
+  displayName: 'Install Playwright Browser and Deps'
 
 - script: |
-    npm ci    
-  displayName: 'npm install'
-- script: npx playwright install --with-deps chromium
-  displayName: 'Install Playwright browsers'
-- script: |
-    npx playwright test --project=chromium    
-  displayName: 'Run Tests'
-  env:
-    CI: 'true'
+    echo "##vso[task.setvariable variable=ENV]${{ parameters.Environments }}"
+    echo "##vso[task.setvariable variable=VALID_USERNAME]$(valid_username_saucedemo)"
+    echo "##vso[task.setvariable variable=VALID_PASSWORD]$(valid_password_saucedemo)"
+    echo "##vso[task.setvariable variable=INVALID_USERNAME]$(invalid_username_saucedemo)"
+    echo "##vso[task.setvariable variable=INVALID_PASSWORD]$(invalid_password_saucedemo)"
+  displayName: Set Variables
+  
+- script: npx playwright test --project=chromium
+  displayName: 'Run All Tests'
+  
 - task: PublishTestResults@2
-  displayName: 'Publish test results'
+  displayName: 'Publish test results tab'
   inputs:
     searchFolder: 'test-results'
     testResultsFormat: 'JUnit'
     testResultsFiles: 'e2e-junit-results.xml'
-    mergeTestResults: true
-    failTaskOnFailedTests: true
     testRunTitle: 'My End-To-End Tests'
   condition: succeededOrFailed()
+
 - task: PublishPipelineArtifact@1
   inputs:
-    artifact: playwright-report-test
+    targetPath: '$(System.DefaultWorkingDirectory)/playwright-report'
+    artifact: 'Test Results'
     publishLocation: 'pipeline'
   condition: succeededOrFailed()
-
-
