@@ -13,5 +13,5 @@ jobs:
         uses: Azure/pipelines@v1.2
         with:
           azure-devops-project-url: 'https://dev.azure.com/murillolopesoliveiraa/Azure%20Learning'
-          azure-pipeline-name: 'Playwright - All Tests'
+          azure-pipeline-name: 'Azure Integration'
           azure-devops-token: '${{ secrets.Azure_Token }}'
