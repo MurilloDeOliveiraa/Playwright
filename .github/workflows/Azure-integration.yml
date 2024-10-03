@@ -14,4 +14,4 @@ jobs:
         with:
           azure-devops-project-url: 'https://dev.azure.com/murillolopesoliveiraa/Azure%20Learning'
           azure-pipeline-name: 'Playwright - All Tests'
-          azure-devops-token: '7oxybdvnd4l6kvgdg3u7hrbm3oe6fzynug7sag3hwvwiheucv2ga'
+          azure-devops-token: '${{ secrets.Azure_Token }}'
