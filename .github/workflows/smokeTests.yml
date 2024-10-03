@@ -12,6 +12,7 @@ jobs:
     environment: 
       name: Prod
     env:
+      ENV: prod
       VALID_USERNAME: ${{secrets.VALID_USERNAME}}
       VALID_PASSWORD: ${{secrets.VALID_PASSWORD}}
       INVALID_USERNAME: wrong_username
