@@ -1,6 +1,7 @@
 # Playwright Project
 
 ## Used Technologies
+- Azure Pipelines (Integration with GitHub Actions)
 - GitHub Actions (CI/CD)
 - JavaScript
 - Playwright Features
