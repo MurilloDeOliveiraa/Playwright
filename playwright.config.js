@@ -12,7 +12,7 @@ if (env !== '') {
   });
 } else {
   dotenv.config({
-    path: `./Envs/prod.env`  //here it'll read a specific env file for a specific environment
+    path: `./Envs/${process.env.ENV}.env`  //here it'll read a specific env file for a specific environment
   });
 }
 
