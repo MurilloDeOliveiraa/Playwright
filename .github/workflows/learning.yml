@@ -40,7 +40,7 @@ jobs:
         run: npx playwright test --grep=@Smoke --project=chromium
       - name: Publish Artifact (Only if tests fail)
         uses: actions/upload-artifact@v4
-        if: failure() && steps.tests.conclusion == 'failure'
+        if: always()
         with:
           name: playwright-report
           path: playwright-report/
@@ -56,5 +56,9 @@ jobs:
         - name: Show Artifact Content
           run: ls
         - name: Deploy Artifact
+          id: deploy
           run: echo "Deploying..."
+        - name: Display Error Message
+          if: failure() && steps.deploy.conclusion == 'failure'
+          run: echo "I could not find this Report in your Project"
 
