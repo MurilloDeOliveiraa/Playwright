@@ -27,7 +27,7 @@ test.describe('@Smoke - Smoke Tests', () => {
 
     test('Successfully Login', async () => {
         await loginPage.goToLoginPage(url);
-        await loginPage.fillLoginFields(process.env.VALID_USERNAMEE, process.env.VALID_PASSWORD);
+        await loginPage.fillLoginFields(process.env.VALID_USERNAME, process.env.VALID_PASSWORD);
         await homePage.verifyIsOnHomePage();
     });
 
