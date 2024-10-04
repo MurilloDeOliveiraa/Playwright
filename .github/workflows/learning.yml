@@ -61,4 +61,15 @@ jobs:
         - name: Display Error Message
           if: failure() && steps.deploy.conclusion == 'failure'
           run: echo "I could not find this Report in your Project"
+    Run-Azure-Pipeline:
+      needs: Deploy
+      if: always()
+      runs-on: ubuntu-latest
+      steps:
+        - name: Call Azure Pipeline
+          uses: Azure/pipelines@v1.2
+          with:
+            azure-devops-project-url: 'https://dev.azure.com/murillolopesoliveiraa/Azure%20Learning'
+            azure-pipeline-name: 'Azure Integration'
+            azure-devops-token: '${{ secrets.Azure_Token }}'
 
