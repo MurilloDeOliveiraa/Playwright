@@ -1,6 +1,11 @@
 trigger:
 - none
 
+pr:
+  branches:
+    include:
+    - learning-GHA
+
 pool:
   vmImage: ubuntu-latest
 
