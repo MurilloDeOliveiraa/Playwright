@@ -12,7 +12,6 @@ export class LoginPage {
         this.passwordField = page.locator('#password');
         this.loginButton = page.locator('#login-button');
         this.errorMessageContainer = page.locator('.error-message-container');
-        this.errorMessageContainer2 = page.locator('.error-message-container');
     }
 
     async goToLoginPage(url) {
