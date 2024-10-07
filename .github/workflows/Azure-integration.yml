@@ -9,9 +9,12 @@ jobs:
   Run-Azure-Pipeline:
     runs-on: ubuntu-latest
     steps:
-      - name: Call Azure Pipeline
-        uses: Azure/pipelines@v1.2
-        with:
-          azure-devops-project-url: 'https://dev.azure.com/murillolopesoliveiraa/Azure%20Learning'
-          azure-pipeline-name: 'Azure Integration'
-          azure-devops-token: '${{ secrets.Azure_Token }}'
+      # - name: Call Azure Pipeline
+      #   uses: Azure/pipelines@v1.2
+      #   with:
+      #     azure-devops-project-url: 'https://dev.azure.com/murillolopesoliveiraa/Azure%20Learning'
+      #     azure-pipeline-name: 'Azure Integration'
+      #     azure-devops-token: '${{ secrets.Azure_Token }}'
+        - name: mostrar dados
+          run: echo "Murillo Lopes"
+
