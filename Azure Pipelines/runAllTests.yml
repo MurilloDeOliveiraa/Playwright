@@ -1,16 +1,16 @@
 trigger:
-- none
+  - none
 
 pr:
   branches:
     include:
-    - learning-GHA
+      - master
 
 pool:
   vmImage: ubuntu-latest
 
 variables:
-- group: ENV_VARIABLES
+  - group: ENV_VARIABLES
 
 parameters:
   - name: Environments
@@ -23,40 +23,40 @@ parameters:
       - prod
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.x'
-  displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "18.x"
+    displayName: "Install Node.js"
 
-- script: npm ci
-  displayName: 'npm install and build'
+  - script: npm ci
+    displayName: "npm install and build"
 
-- script: npx playwright install chromium --with-deps
-  displayName: 'Install Playwright Browser and Deps'
+  - script: npx playwright install chromium --with-deps
+    displayName: "Install Playwright Browser and Deps"
 
-- script: |
-    echo "##vso[task.setvariable variable=ENV]${{ parameters.Environments }}"
-    echo "##vso[task.setvariable variable=VALID_USERNAME]$(valid_username_saucedemo)"
-    echo "##vso[task.setvariable variable=VALID_PASSWORD]$(valid_password_saucedemo)"
-    echo "##vso[task.setvariable variable=INVALID_USERNAME]$(invalid_username_saucedemo)"
-    echo "##vso[task.setvariable variable=INVALID_PASSWORD]$(invalid_password_saucedemo)"
-  displayName: Set Variables
-  
-- script: npx playwright test --project=chromium
-  displayName: 'Run All Tests'
-  
-- task: PublishTestResults@2
-  displayName: 'Publish test results tab'
-  inputs:
-    searchFolder: 'test-results'
-    testResultsFormat: 'JUnit'
-    testResultsFiles: 'e2e-junit-results.xml'
-    testRunTitle: 'My End-To-End Tests'
-  condition: succeededOrFailed()
+  - script: |
+      echo "##vso[task.setvariable variable=ENV]${{ parameters.Environments }}"
+      echo "##vso[task.setvariable variable=VALID_USERNAME]$(valid_username_saucedemo)"
+      echo "##vso[task.setvariable variable=VALID_PASSWORD]$(valid_password_saucedemo)"
+      echo "##vso[task.setvariable variable=INVALID_USERNAME]$(invalid_username_saucedemo)"
+      echo "##vso[task.setvariable variable=INVALID_PASSWORD]$(invalid_password_saucedemo)"
+    displayName: Set Variables
 
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(System.DefaultWorkingDirectory)/playwright-report'
-    artifact: 'Test Results'
-    publishLocation: 'pipeline'
-  condition: succeededOrFailed()
+  - script: npx playwright test --project=chromium
+    displayName: "Run All Tests"
+
+  - task: PublishTestResults@2
+    displayName: "Publish test results tab"
+    inputs:
+      searchFolder: "test-results"
+      testResultsFormat: "JUnit"
+      testResultsFiles: "e2e-junit-results.xml"
+      testRunTitle: "My End-To-End Tests"
+    condition: succeededOrFailed()
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: "$(System.DefaultWorkingDirectory)/playwright-report"
+      artifact: "Test Results"
+      publishLocation: "pipeline"
+    condition: succeededOrFailed()
