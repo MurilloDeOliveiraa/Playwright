@@ -1,4 +1,4 @@
-name: $(Build.SourceBranchName)_$(Build.SourceVersionMessage)
+name: $(System.PullRequest.SourceBranch)_$(System.PullRequest.SourceCommitId)
 
 trigger:
   - none
