@@ -33,7 +33,7 @@ jobs:
     # Reusando um worflow
     deploy:
         needs: build
-        uses: ./.github/workflows/reusable.yml
+        uses: ./.github/workflows/reusable.yml  #a output 'result' vem desse workflow aqui e passa para o job 'deploy'
         with:
           myName: 'Murillo Lopes de Oliveira'
         secrets: 
