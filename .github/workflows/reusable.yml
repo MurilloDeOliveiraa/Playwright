@@ -1,0 +1,9 @@
+name: Reusable Workflow
+on:
+    workflow_call:  #Preciso usar essa syntax para poder chamar esse workflow em outros workflows
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing
+        run: echo "I'm Testing it"

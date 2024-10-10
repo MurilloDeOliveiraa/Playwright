@@ -30,4 +30,9 @@ jobs:
               run: |
                 echo ${{matrix.node-version}}
                 echo ${{matrix.os}}
-        
+    Deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+          - name: Call Reusable workflow
+            uses: ./github/workflows/reusable.yml  
