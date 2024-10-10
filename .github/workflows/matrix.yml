@@ -1,6 +1,7 @@
 name: Matrix Example
 on:
-    pull_request: 
+    workflow_dispatch:
+    push: 
         branches: learning-GHA
 jobs:
     build:
