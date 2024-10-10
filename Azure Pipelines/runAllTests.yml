@@ -23,12 +23,6 @@ parameters:
     - dev
     - uat
     - prod
-- name: Username
-  type: string
-  default: ''
-- name: Password
-  type: string
-  default: ''
 
 steps:
   - task: NodeTool@0
