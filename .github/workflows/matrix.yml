@@ -32,5 +32,8 @@ jobs:
                 echo ${{matrix.os}}
     deploy:
         needs: build
-        uses: ./.github/workflows/reusable.yml 
+        uses: ./.github/workflows/reusable.yml
+        with:
+          myName: 'Murillo Lopes de Oliveira'
+
             

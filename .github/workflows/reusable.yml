@@ -1,9 +1,15 @@
 name: Reusable Workflow
 on:
     workflow_call:  #Preciso usar essa syntax para poder chamar esse workflow em outros workflows
+        inputs:
+            myName:
+                description: Getting my name as a parameter
+                type: string
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
       - name: Testing
-        run: echo "I'm Testing it"
+        run: |
+            echo "I'm Testing it"
+            echo ${{inputs.myName}}
