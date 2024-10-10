@@ -15,14 +15,20 @@ variables:
   - group: ENV_VARIABLES
 
 parameters:
-  - name: Environments
-    type: string
-    default: prod
-    values:
-      - qa
-      - dev
-      - uat
-      - prod
+- name: Environments
+  type: string
+  default: prod
+  values:
+    - qa
+    - dev
+    - uat
+    - prod
+- name: Username
+  type: string
+  default: ''
+- name: Password
+  type: string
+  default: ''
 
 steps:
   - task: NodeTool@0
