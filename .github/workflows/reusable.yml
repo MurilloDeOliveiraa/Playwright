@@ -8,6 +8,11 @@ on:
         secrets:
             password:
                 description: Getting my password
+        outputs:
+            result:
+                description: The Job Result
+                value: echo "IT PASSED!"
+          
 jobs:
   Build:
     runs-on: ubuntu-latest
