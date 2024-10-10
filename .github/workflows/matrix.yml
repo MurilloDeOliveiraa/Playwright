@@ -9,7 +9,7 @@ jobs:
         #continue-on-error: true
         strategy:
             matrix:    # serve para rodar o build em todas as configurações possíveis abaixo. Exemplo: ubuntu com node 12, com node 14 etc. Windows com node 12, 14 etc
-                node-version: [12, 14, 16]
+                node-version: [12, 14]
                 os: [ubuntu-latest, windows-latest]
                 include:
                   - node-version: 18   #posso adicionar uma combinação específica
@@ -35,5 +35,7 @@ jobs:
         uses: ./.github/workflows/reusable.yml
         with:
           myName: 'Murillo Lopes de Oliveira'
+        secrets: 
+            password: ${{secrets.INVALID_PASSWORD}}
 
             

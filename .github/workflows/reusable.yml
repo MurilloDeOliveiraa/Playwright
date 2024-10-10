@@ -5,6 +5,9 @@ on:
             myName:
                 description: Getting my name as a parameter
                 type: string
+        secrets:
+            password:
+                description: Getting my password
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -13,3 +16,4 @@ jobs:
         run: |
             echo "I'm Testing it"
             echo ${{inputs.myName}}
+            echo "My password is ${{secrets.password}}"
