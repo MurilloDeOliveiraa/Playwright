@@ -11,10 +11,12 @@ on:
         outputs:
             result:
                 description: The Job Result
-                value: echo "IT PASSED!"
+                value: ${{jobs.Build.outputs.outcome}}
           
 jobs:
   Build:
+    outputs:
+      outcome: ${{steps.set-result.outputs.step-result}}  #esse job vai retornar a saída da linha 29
     runs-on: ubuntu-latest
     steps:
       - name: Testing
@@ -22,3 +24,6 @@ jobs:
             echo "I'm Testing it"
             echo ${{inputs.myName}}
             echo "My password is ${{secrets.password}}"
+      - name: Set Result output
+        id: set-result
+        run: echo "step-result=success" >> $GITHUB_OUTPUT

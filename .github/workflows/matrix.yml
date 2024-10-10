@@ -38,5 +38,13 @@ jobs:
           myName: 'Murillo Lopes de Oliveira'
         secrets: 
             password: ${{secrets.INVALID_PASSWORD}}
+    show-output:
+        needs: deploy
+        runs-on: ubuntu-latest
+        steps:
+          - name: Print Output
+            run: echo "${{needs.deploy.outputs.result}}" 
+            # vou acessar a output do job 'Deploy', o qual está chamando o workflow 'reusable' e esse workflow tem uma output chamada 'result'
+
 
             
