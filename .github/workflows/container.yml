@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     container: 
         image: mcr.microsoft.com/playwright:v1.48.0-noble
+        options: --user 1001
     environment: 
       name: Prod
     env:
@@ -22,8 +23,6 @@ jobs:
       uses: actions/checkout@v4
     - name: Install dependencies
       run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
     - name: Run Playwright Tests 
       run: npx playwright test --grep=@Smoke --project=chromium
     - name: Publish Artifact
