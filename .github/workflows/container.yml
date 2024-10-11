@@ -1,4 +1,4 @@
-name: Playwright Pipeline (Smoke Tests)
+name: Docker Container (Smoke Tests)
 
 on:
   push:
