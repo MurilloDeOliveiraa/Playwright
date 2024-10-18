@@ -54,4 +54,4 @@ jobs:
             - name: Deploy Artifact
               run: echo "Deploying..."
             - name: Show Previous Job Output Value
-              run: echo "${{needs.Run-Tests.outputs.nomeArquivo}}
+              run: echo "${{needs.Run-Tests.outputs.nomeArquivo}}""
