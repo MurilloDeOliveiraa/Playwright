@@ -1,0 +1,5 @@
+name: JS Custom Action
+description: My First JS Custom Action
+runs:
+  using: "node20"
+  main: "test.js"

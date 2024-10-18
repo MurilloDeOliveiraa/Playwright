@@ -1,0 +1,65 @@
+name: Docker Container (Smoke Tests)
+
+on:
+  push:
+    branches: [ "learning-GHA" ]
+
+jobs:
+    Run-Tests:
+        runs-on: ubuntu-latest
+        outputs:
+          nomeArquivo: ${{steps.get-prod-env.outcome.arquivo}}  #o último parametro dessa variável precisa ter o mesmo nome q colocamos na linha 36
+        container: 
+            image: mcr.microsoft.com/playwright:v1.43.1-jammy
+            options: --user 1001
+        services:  # service containers servem para por exemplo interagir com um banco de dados fictício, ao invés de Prod. A interação é somente durante o a execução do build
+            playwright:  # posso colocar qualquer nome
+                image: mcr.microsoft.com/playwright:v1.43.1-jammy
+                options: --user 1001
+        environment: 
+            name: Prod  # De acordo com os environments que tenho no GitHub
+        env:            # essas variáveis serão de acordo com o enviroment acima
+            ENV: prod
+            VALID_USERNAME: ${{secrets.VALID_USERNAME}}
+            VALID_PASSWORD: ${{secrets.VALID_PASSWORD}}
+            INVALID_USERNAME: wrong_username
+            INVALID_PASSWORD: ASDFGH
+        steps:
+            - name: Checkout Branch
+              uses: actions/checkout@v4
+            - name: Install dependencies
+              run: npm ci
+            - name: Run Playwright Tests 
+              run: npx playwright test --grep=@Smoke --project=chromium
+            - name: Get prod.env file
+              id: get-prod-env
+              run: find Envs/prod.env -type f -execdir echo 'arquivo={}' >> $GITHUB_OUTPUT ';'  #vai achar o arquivo, printar o nome e guardar na output nomeArquivo
+            - name: Publish Artifact
+              uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                name: playwright-report
+                path: playwright-report/
+                retention-days: 30
+    Deploy:
+        needs: Run-Tests
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get Test Result Artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: playwright-report
+            - name: Show Artifact Content
+              run: ls
+            - name: Deploy Artifact
+              run: echo "Deploying..."
+            - name: Show Previous Job Output Value
+              run: echo "${{needs.Run-Tests.outputs.nomeArquivo}}"
+    Call-JS-Custom-Action:
+      needs: Deploy
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Branch
+          uses: actions/checkout@v4
+        - name: Run JS Custom Action
+          uses: ./.github/actions/js-custom-action
