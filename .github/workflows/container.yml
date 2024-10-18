@@ -55,3 +55,11 @@ jobs:
               run: echo "Deploying..."
             - name: Show Previous Job Output Value
               run: echo "${{needs.Run-Tests.outputs.nomeArquivo}}"
+    Call-JS-Custom-Action:
+      needs: Deploy
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Branch
+          uses: actions/checkout@v4
+        - name: Run JS Custom Action
+          uses: ./.github/actions/js-custom-action
