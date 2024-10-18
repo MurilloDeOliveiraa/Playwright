@@ -75,6 +75,8 @@ jobs:
       needs: Run-Azure-Pipeline
       runs-on: ubuntu-latest
       steps:
+        - name: Checkout Branch
+          uses: actions/checkout@v4
         - name: Run JS Custom Action
           uses: ./.github/actions/js-custom-action
 
