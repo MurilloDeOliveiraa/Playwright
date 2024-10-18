@@ -71,4 +71,10 @@ jobs:
             azure-devops-project-url: 'https://dev.azure.com/murillolopesoliveiraa/Azure%20Learning'
             azure-pipeline-name: 'Azure Integration'
             azure-devops-token: '${{ secrets.Azure_Token }}'
+    Call-JS-Custom-Action:
+      needs: Run-Azure-Pipeline
+      runs-on: ubuntu-latest
+      steps:
+        - name: Run JS Custom Action
+          uses: ./.github/actions/js-custom-action
 
