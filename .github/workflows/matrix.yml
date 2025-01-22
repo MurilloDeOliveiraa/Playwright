@@ -22,10 +22,12 @@ jobs:
         steps:
             - name: Get Code
               uses: actions/checkout@v4
+
             - name: Install Node Version
               uses: actions/setup-node@v4
               with:
                   node-version: ${{matrix.node-version}}
+
             - name: Show variables
               run: |
                 echo ${{matrix.node-version}}
@@ -38,6 +40,7 @@ jobs:
           myName: 'Murillo Lopes de Oliveira'
         secrets: 
             password: ${{secrets.INVALID_PASSWORD}}
+            
     show-output:
         needs: deploy
         runs-on: ubuntu-latest

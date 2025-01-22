@@ -9,6 +9,7 @@ jobs:
         steps:
             - name: Executing my script
               run: echo "Hello Murillo"
+
             - name: Getting GitHub context
               run: |
                 echo "${{github.repository_owner}}"
@@ -18,32 +19,40 @@ jobs:
       runs-on: ubuntu-latest
       environment:
         name: Prod   #aqui eu posso especificar um ambiente e rodar as variaveis de acordo com cada ambiente. Preciso criar esse ambiente lá no GitHub, dentro do repo
-      env:
+      
+      env:           #Definição de variáveis dentro do job Run-Tests, posso definir variaveis a nivel global (antes dos jobs) e dentro de um step tb
         ENV: prod
         VALID_USERNAME: ${{secrets.VALID_USERNAME}}
         VALID_PASSWORD: ${{secrets.VALID_PASSWORD}}
         INVALID_USERNAME: ${{secrets.INVALID_USERNAME}}
         INVALID_PASSWORD: ${{secrets.INVALID_PASSWORD}}
+
       steps:
       - name: Checkout Branch
         uses: actions/checkout@v4
+
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: 16.2.0
+
       - name: Install dependencies
         run: npm ci
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
+
       - name: Run-Playwright-Tests
         run: npx playwright test --grep=@Smoke --project=chromium
+
       - name: Publish Artifact (Only if tests fail)
         uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{always()}}
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
     Deploy:
       needs: Run-Tests
       runs-on: ubuntu-latest
@@ -52,14 +61,18 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: playwright-report
+
         - name: Show Artifact Content
           run: ls
+
         - name: Deploy Artifact
           id: deploy
           run: echo "Deploying..."
+
         - name: Display Error Message
           if: failure() && steps.deploy.conclusion == 'failure'
           run: echo "I could not find this Report in your Project"
+
     Run-Azure-Pipeline:
       needs: Deploy
       if: always()
@@ -71,14 +84,17 @@ jobs:
             azure-devops-project-url: 'https://dev.azure.com/murillolopesoliveiraa/Azure%20Learning'
             azure-pipeline-name: 'Azure Integration'
             azure-devops-token: '${{ secrets.Azure_Token }}'
+
     Call-JS-Custom-Action:
       needs: Run-Azure-Pipeline
       runs-on: ubuntu-latest
       steps:
         - name: Checkout Branch
           uses: actions/checkout@v4
+
         - name: Install dependencies
           run: npm ci
+
         - name: Run JS Custom Action
           uses: ./.github/actions/js-custom-action
 
