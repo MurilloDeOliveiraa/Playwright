@@ -1,4 +1,3 @@
-//@ts-check
 'use strict';
 
 import { test, chromium } from '@playwright/test'
