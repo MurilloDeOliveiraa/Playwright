@@ -2,9 +2,11 @@
 'use strict';
 
 import { expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class HomePage {
+export class HomePage extends BasePage {
     constructor(page) {
+        super(page);  //calling BasePage's constructor
         this.page = page;
 
         this.pageUrl = 'https://www.saucedemo.com/inventory.html';

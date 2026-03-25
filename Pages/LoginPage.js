@@ -1,4 +1,3 @@
-//@ts-check
 'use strict';
 
 import { expect } from '@playwright/test';
